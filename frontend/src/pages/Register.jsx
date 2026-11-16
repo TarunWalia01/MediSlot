@@ -25,7 +25,7 @@ function Register() {
   }
 
   if (user) {
-    return <Navigate to="/account" replace />;
+    return <Navigate to={user.role === 'admin' ? '/admin' : '/appointments'} replace />;
   }
 
   function updateField(event) {

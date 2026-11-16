@@ -2,11 +2,11 @@
 
 ## Current phase
 
-Phase 4 — Scheduling and appointment booking implementation complete; manual API and Compass verification pending
+Phase 5 — Final implementation and documentation complete; manual integration verification pending
 
 ## Next phase
 
-Phase 5 — Frontend workflow completion and broader integration (not started; wait for explicit Phase 4 confirmation)
+None. Phase 5 is the final development phase; only the manual acceptance checks below remain.
 
 ## Completed
 
@@ -102,13 +102,60 @@ Phase 5 — Frontend workflow completion and broader integration (not started; w
 - On a MongoDB deployment without transaction support, booking uses an atomic slot claim and compensating cleanup. A process crash between the claim and appointment insert fails closed (the slot stays unavailable) and may require administrator cleanup; the configured Atlas deployment was verified to support transactions.
 - GitHub push — not performed.
 
-## Next steps
+## Phase 5 — Final integration, verification, and exam preparation
 
-1. In Thunder Client, use a patient token to request `GET /api/schedules/:doctorId?date=YYYY-MM-DD`, book an available returned slot, and confirm the saved Appointment and booked Schedule slot in Compass.
-2. Send two booking requests for the same returned slot as close together as possible; only one should return `201`, with the other returning `409`.
-3. Verify missing/invalid token, admin attempting patient booking, invalid IDs, past dates/times, unavailable slots, inactive references, and a service longer than its slot.
-4. Verify patient-only `GET /api/appointments/my`, owner-scoped `GET /api/appointments/:id`, patient cancellation, and that cancelling a pending/confirmed appointment releases its slot for a new booking.
-5. With an admin token, test `POST/PUT/DELETE /api/schedules`, `GET /api/schedules/admin`, both admin appointment-list paths (`/api/appointments` and `/api/admin/appointments`), and allowed/denied status transitions. Confirm rejected/cancelled slots release and completed slots remain occupied.
-6. In MongoDB Compass, inspect Schedule/Appointment references and confirm the schedule unique `{ doctorId, date }` index plus the partial unique active-slot index are present.
-7. Re-run the pending Phase 2 authentication and Phase 3 doctor/service API tests as needed; their earlier untested status is unchanged.
-8. Do not start Phase 5 until Phase 4 manual verification is complete and explicitly confirmed.
+### Completed
+
+- Replaced the setup-only home panel with a data-backed landing page showing backend/database status, featured doctors, services, popular specializations, search, and the booking overview. Doctor and service information is requested from the backend; no doctor or service demo records were hardcoded.
+- Preserved the Phase 1 health status display on the home page.
+- Added search-query handoff from the landing page to doctor listing.
+- Added a protected admin dashboard, admin overview navigation, and the protected `GET /api/admin/dashboard` endpoint. Counts include active doctors, patient accounts, all appointments, and each appointment status.
+- Reused the existing public, patient, and admin doctor/service/schedule/appointment pages; did not add appointment or scheduling behavior beyond Phase 4.
+- Added a reusable footer and responsive styling for the home and admin dashboard.
+- Added `README.md`, `PROJECT_EXPLANATION.md`, and `VIVA_QUESTIONS.md` with repository-specific setup, API, database, authentication, booking, and viva information.
+- Updated this file to mark Phase 5 as the final development phase.
+
+### Files created or modified
+
+- Added: `README.md`, `PROJECT_EXPLANATION.md`, `VIVA_QUESTIONS.md`
+- Added: `backend/controllers/adminController.js`
+- Added: `frontend/src/components/Footer.jsx`
+- Added: `frontend/src/pages/Home.jsx`, `frontend/src/pages/AdminDashboard.jsx`
+- Modified: `backend/routes/adminRoutes.js`
+- Modified: `frontend/src/App.jsx`, `frontend/src/App.css`
+- Modified: `frontend/src/pages/Doctors.jsx`, `frontend/src/pages/Login.jsx`, `frontend/src/pages/Register.jsx`
+- Modified: `frontend/src/services/api.js`
+- Modified: `PROGRESS.md`
+
+### Commands and actual results
+
+- `npm test --prefix backend` — passed; 7 tests, 0 failures.
+- `npm run build --prefix frontend` — passed; Vite production build completed.
+- `node --check` across 29 backend source JavaScript files, excluding `node_modules` — passed.
+- `git diff --check` — passed.
+- `git ls-files` check — no `.env` or `node_modules` files are tracked; only `.env.example` templates are tracked.
+- Standalone runtime validation — 4/4 assertions passed: backend tests, backend entry syntax, frontend production build, and HTTP 200 from the Vite home route. The runtime tool could not parse Node's TAP test counts (`framework=unknown`), but its captured output shows all 7 tests passed and the process exited with code 0.
+- Browser recording was not run; the selected validation mode was the HTTP-probe fallback.
+- No dependencies were added in Phase 5.
+- No new REST API calls were tested with Thunder Client in this phase.
+- No frontend interaction or API workflow was submitted in a browser during these checks.
+- MongoDB Atlas and Compass were not re-tested in Phase 5. The prior Phase 4 startup/index verification remains as recorded above.
+- No test users, doctors, services, schedules, or appointments were created in this phase.
+- GitHub push — not performed.
+
+### Known limitations and remaining manual verification
+
+- Use Thunder Client and MongoDB Compass to complete the registration/login, admin authorization, doctor/service/schedule setup, patient booking, duplicate booking, ownership, cancellation/slot-release, and admin status-update workflows. These endpoints are not claimed as tested.
+- Verify the admin dashboard count endpoint with an admin bearer token and verify that a patient receives `403`.
+- Confirm schedule and appointment documents and indexes in Compass; no records were inserted for this phase.
+- The frontend stores bearer tokens in `sessionStorage`, which is accessible to browser JavaScript; see the security explanation in `PROJECT_EXPLANATION.md`.
+- A dedicated admin patient-management screen is not included. The admin overview reports patient totals, while account management remains outside the implemented UI.
+- No deployment configuration was added or tested.
+
+### Final manual checks (no further development phase)
+
+1. In Thunder Client, verify registration (`201`), duplicate registration (`409`), login, invalid credentials (`401`), and `/api/auth/me` with missing, invalid, and valid bearer tokens.
+2. Log in as a patient and confirm `GET /api/admin/dashboard` and admin write routes return `403`. Log in as admin and confirm the dashboard endpoint returns counts.
+3. Use an admin token to create a service, doctor, and future schedule. Use a patient token to view slots and book one; immediately repeat the same booking and verify only one succeeds.
+4. Verify appointment ownership by trying another patient's appointment ID. Cancel an eligible appointment and confirm its schedule slot is released. Check status changes as admin and confirm completed appointments remain in history.
+5. In MongoDB Compass, inspect the five collections, their references, and the unique schedule and active appointment indexes.

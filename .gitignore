@@ -9,6 +9,9 @@ node_modules/
 # Build output
 dist/
 
+# Local validation plans and results
+**/.tsupgrader/runtime-validation/
+
 # Logs
 npm-debug.log*
 yarn-debug.log*

@@ -25,7 +25,7 @@ function Login() {
   if (user) {
     return (
       <Navigate
-        to={user.role === 'admin' ? '/admin/appointments' : '/appointments'}
+        to={user.role === 'admin' ? '/admin' : '/appointments'}
         replace
       />
     );
@@ -50,7 +50,7 @@ function Login() {
     try {
       const signedInUser = await login({ email: email.trim(), password });
       navigate(
-        signedInUser.role === 'admin' ? '/admin/appointments' : '/appointments',
+        signedInUser.role === 'admin' ? '/admin' : '/appointments',
         { replace: true }
       );
     } catch (error) {

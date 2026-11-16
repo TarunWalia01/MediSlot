@@ -132,6 +132,11 @@ export async function getAdminAppointments(params = {}) {
   return response.data;
 }
 
+export async function getAdminDashboard() {
+  const response = await api.get('/admin/dashboard');
+  return response.data;
+}
+
 export async function updateAppointmentStatus(id, status) {
   const response = await api.patch(`/appointments/${id}/status`, { status });
   return response.data;

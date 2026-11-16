@@ -1,13 +1,16 @@
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import DoctorCard from '../components/DoctorCard.jsx';
 import { getDoctors, getServices } from '../services/api.js';
 
 function Doctors() {
+  const [searchParams] = useSearchParams();
+  const initialSearch = searchParams.get('search') || '';
   const [doctors, setDoctors] = useState([]);
   const [services, setServices] = useState([]);
   const [pagination, setPagination] = useState(null);
   const [filters, setFilters] = useState({
-    search: '',
+    search: initialSearch,
     specialization: '',
     service: '',
     sort: 'name',
@@ -16,7 +19,7 @@ function Doctors() {
     limit: 9
   });
   const [searchForm, setSearchForm] = useState({
-    search: '',
+    search: initialSearch,
     specialization: '',
     service: '',
     sorting: 'name:asc'
