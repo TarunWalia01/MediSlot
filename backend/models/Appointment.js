@@ -45,6 +45,11 @@ const appointmentSchema = new mongoose.Schema({
     ref: 'Service',
     required: true
   },
+  scheduleId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Schedule',
+    required: true
+  },
   appointmentDate: {
     type: String,
     required: true,
@@ -75,6 +80,14 @@ const appointmentSchema = new mongoose.Schema({
 
 appointmentSchema.index({ patientId: 1, appointmentDate: -1 });
 appointmentSchema.index({ doctorId: 1, appointmentDate: 1, status: 1 });
+appointmentSchema.index({ scheduleId: 1, status: 1 });
+appointmentSchema.index({
+  doctorId: 1,
+  appointmentDate: 1,
+  status: 1,
+  'timeSlot.startTime': 1,
+  'timeSlot.endTime': 1
+});
 appointmentSchema.index(
   { doctorId: 1, appointmentDate: 1, 'timeSlot.startTime': 1 },
   {

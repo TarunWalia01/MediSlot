@@ -23,7 +23,12 @@ function Login() {
   }
 
   if (user) {
-    return <Navigate to="/account" replace />;
+    return (
+      <Navigate
+        to={user.role === 'admin' ? '/admin/appointments' : '/appointments'}
+        replace
+      />
+    );
   }
 
   async function handleSubmit(event) {
@@ -43,8 +48,11 @@ function Login() {
     setIsSubmitting(true);
 
     try {
-      await login({ email: email.trim(), password });
-      navigate('/account', { replace: true });
+      const signedInUser = await login({ email: email.trim(), password });
+      navigate(
+        signedInUser.role === 'admin' ? '/admin/appointments' : '/appointments',
+        { replace: true }
+      );
     } catch (error) {
       setErrorMessage(getErrorMessage(error));
     } finally {

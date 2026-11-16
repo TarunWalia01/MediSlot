@@ -4,9 +4,13 @@ import express from 'express';
 import mongoose from 'mongoose';
 import { connectDB } from './config/db.js';
 import adminRoutes from './routes/adminRoutes.js';
+import appointmentRoutes from './routes/appointmentRoutes.js';
 import authRoutes from './routes/authRoutes.js';
+import doctorRoutes from './routes/doctorRoutes.js';
 import healthRoutes from './routes/healthRoutes.js';
-import { Appointment } from './models/index.js';
+import scheduleRoutes from './routes/scheduleRoutes.js';
+import serviceRoutes from './routes/serviceRoutes.js';
+import { Appointment, Schedule } from './models/index.js';
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -17,6 +21,10 @@ app.use(cors({
 app.use(express.json());
 app.use('/api/health', healthRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api/doctors', doctorRoutes);
+app.use('/api/services', serviceRoutes);
+app.use('/api/schedules', scheduleRoutes);
+app.use('/api/appointments', appointmentRoutes);
 app.use('/api/admin', adminRoutes);
 
 async function checkForDuplicateActiveAppointments() {
@@ -52,6 +60,18 @@ async function checkForDuplicateActiveAppointments() {
 }
 
 async function initializeAppointmentIndexes() {
+  await Schedule.createIndexes();
+  const scheduleIndexes = await Schedule.collection.indexes();
+  const uniqueDoctorDateIndexExists = scheduleIndexes.some((index) => (
+    index.unique === true
+    && index.key.doctorId === 1
+    && index.key.date === 1
+  ));
+
+  if (!uniqueDoctorDateIndexExists) {
+    throw new Error('The unique doctor/date schedule index was not found after initialization.');
+  }
+
   await checkForDuplicateActiveAppointments();
   await Appointment.createIndexes();
 
@@ -73,7 +93,7 @@ async function initializeAppointmentIndexes() {
     throw new Error('The active appointment slot index was not found after initialization.');
   }
 
-  console.log('Appointment indexes initialized and verified.');
+  console.log('Schedule and appointment indexes initialized and verified.');
 }
 
 function listenForHealthChecks() {

@@ -24,7 +24,13 @@ const serviceSchema = new mongoose.Schema({
     type: Number,
     required: true,
     min: 5,
-    max: 480
+    max: 480,
+    validate: {
+      validator(duration) {
+        return Number.isInteger(duration);
+      },
+      message: 'Service duration must be a whole number of minutes.'
+    }
   },
   isActive: {
     type: Boolean,

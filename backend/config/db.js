@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 
+let transactionSupportAvailable = false;
+
 export async function connectDB() {
   const { MONGODB_URI } = process.env;
 
@@ -8,7 +10,16 @@ export async function connectDB() {
   }
 
   await mongoose.connect(MONGODB_URI);
+  const hello = await mongoose.connection.db.admin().command({ hello: 1 });
+  transactionSupportAvailable = Boolean(hello.setName) || hello.msg === 'isdbgrid';
   console.log('MongoDB connected.');
+  console.log(
+    `MongoDB transactions ${transactionSupportAvailable ? 'are available' : 'are unavailable'}.`
+  );
+}
+
+export function supportsMongoTransactions() {
+  return transactionSupportAvailable;
 }
 
 export function getDatabaseStatus() {

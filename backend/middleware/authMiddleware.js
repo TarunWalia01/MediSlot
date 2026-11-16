@@ -66,3 +66,11 @@ export async function authenticate(request, response, next) {
     });
   }
 }
+
+export function authenticateIfProvided(request, response, next) {
+  if (!request.get('authorization')) {
+    return next();
+  }
+
+  return authenticate(request, response, next);
+}
