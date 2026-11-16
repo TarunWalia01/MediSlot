@@ -1,0 +1,89 @@
+#root {
+  min-height: 100vh;
+}
+
+.page {
+  display: grid;
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  place-items: center;
+}
+
+.status-card {
+  width: min(100%, 42rem);
+  padding: clamp(1.5rem, 5vw, 3rem);
+  border: 1px solid #dceaf5;
+  border-radius: 1.25rem;
+  background: #ffffff;
+  box-shadow: 0 1.25rem 3.5rem rgb(26 72 105 / 10%);
+}
+
+.eyebrow {
+  margin: 0 0 0.75rem;
+  color: #1673a5;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-bottom: 0.75rem;
+  color: #15334a;
+  font-size: clamp(2rem, 6vw, 3rem);
+  letter-spacing: -0.04em;
+}
+
+.intro {
+  max-width: 34rem;
+  margin-bottom: 2rem;
+  color: #536b7d;
+  line-height: 1.7;
+}
+
+.connection-panel {
+  padding: 1.25rem;
+  border-radius: 0.9rem;
+  background: #f2f8fc;
+}
+
+.connection-panel h2 {
+  margin-bottom: 1rem;
+  color: #15334a;
+  font-size: 1.05rem;
+}
+
+.status {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0.75rem;
+  color: #536b7d;
+}
+
+.status strong {
+  color: #21804d;
+  text-transform: capitalize;
+}
+
+.status strong.status-warning {
+  color: #a45b00;
+}
+
+.status-error {
+  display: grid;
+  color: #a33030;
+}
+
+.status-message {
+  margin: 1rem 0 0;
+  color: #536b7d;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
