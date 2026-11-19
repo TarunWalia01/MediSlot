@@ -15,7 +15,7 @@ MediSlot is a college project developed to make it easier for patients to find d
 
 - Patient registration and login.
 - Patient and admin roles, with admin-only management pages and API operations.
-- Doctor listing, search, profiles, and service information.
+- Doctor list, search, profiles, and service information.
 - Medical services management.
 - Doctor schedule and appointment availability management.
 - Appointment booking, patient cancellation, and appointment status updates.
