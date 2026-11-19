@@ -7,7 +7,7 @@ MediSlot is a college project developed to make it easier for patients to find d
 ## Team Members
 
 1. Tarun Walia — 2400290100318
-2. Sundaram Yadav — 2400290100319
+2. Sundaram Yadav — 2400290100313
 3. Yuvraj Singh — 2400290100364
 4. Gaurav Sinha — 2400290100144
 
