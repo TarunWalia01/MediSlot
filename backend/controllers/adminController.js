@@ -40,7 +40,7 @@ export async function getAdminDashboard(request, response) {
       }
     });
   } catch (error) {
-    console.error('Admin dashboard request failed:', error.message);
+    console.error('Could not load admin dashboard data:', error.message);
     return response.status(500).json({
       success: false,
       message: 'Unable to load dashboard statistics right now.'
