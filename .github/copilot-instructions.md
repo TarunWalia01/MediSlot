@@ -864,9 +864,7 @@ regenerating files that are already correct. 6. At the end of each
 milestone, provide a concise checkpoint containing: - What was
 completed. - Files created or changed. - Commands run. - Tests passed
 and tests not yet run. - Known issues. - The exact next task. 7.
-Maintain a `PROGRESS.md` file in the project root with the current
-phase, completed work, decisions, commands, test status and next task.
-Update it at the end of each completed milestone. 8. If the interface
+Keep the project README accurate and up to date. 8. If the interface
 warns that the usage limit has been reached, stop work cleanly. Do not
 attempt to bypass the limit, create alternate accounts, or guess when
 access will return. 9. If the interface displays a reset time, tell us
