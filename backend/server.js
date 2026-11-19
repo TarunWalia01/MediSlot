@@ -1,3 +1,4 @@
+
 import 'dotenv/config';
 import cors from 'cors';
 import express from 'express';
@@ -54,7 +55,7 @@ async function checkForDuplicateActiveAppointments() {
 
   if (duplicateSlots.length > 0) {
     throw new Error(
-      'Duplicate active appointment slots exist. Resolve them before creating the unique index.'
+      'Some appointment slots are already booked more than once. Please fix them before creating the unique index.'
     );
   }
 }
@@ -69,7 +70,7 @@ async function initializeAppointmentIndexes() {
   ));
 
   if (!uniqueDoctorDateIndexExists) {
-    throw new Error('The unique doctor/date schedule index was not found after initialization.');
+    throw new Error('Could not find the unique doctor/date index for schedules.');
   }
 
   await checkForDuplicateActiveAppointments();
@@ -90,21 +91,21 @@ async function initializeAppointmentIndexes() {
   });
 
   if (!slotIndexExists) {
-    throw new Error('The active appointment slot index was not found after initialization.');
+    throw new Error('Could not find the unique index for active appointment slots.');
   }
 
-  console.log('Schedule and appointment indexes initialized and verified.');
+  console.log('Schedule and appointment indexes are ready.');
 }
 
 function listenForHealthChecks() {
   app.listen(port, () => {
-    console.log(`MediSlot health endpoint listening at http://localhost:${port}`);
+    console.log(`Health check server is running at http://localhost:${port}`);
   });
 }
 
 async function startServer() {
   if (!process.env.MONGODB_URI) {
-    console.warn('MongoDB is not configured. Starting the health endpoint only.');
+    console.warn('MongoDB connection details are missing. Starting the health check server only.');
     listenForHealthChecks();
     return;
   }
@@ -113,12 +114,12 @@ async function startServer() {
     await connectDB();
     await initializeAppointmentIndexes();
   } catch (error) {
-    console.error(`MediSlot startup failed before listening: ${error.message}`);
+    console.error(`Failed to start the server: ${error.message}`);
 
     try {
       await mongoose.disconnect();
     } catch (disconnectError) {
-      console.error(`MongoDB cleanup failed: ${disconnectError.message}`);
+      console.error(`Error while closing the database connection: ${disconnectError.message}`);
     }
 
     process.exitCode = 1;
@@ -126,11 +127,11 @@ async function startServer() {
   }
 
   if (!process.env.JWT_SECRET) {
-    console.warn('JWT_SECRET is not configured. Login cannot issue tokens yet.');
+    console.warn('JWT_SECRET is missing. Login will not work until it is configured.');
   }
 
   app.listen(port, () => {
-    console.log(`MediSlot API ready at http://localhost:${port}`);
+    console.log(`MediSlot API is running at http://localhost:${port}`);
   });
 }
 
