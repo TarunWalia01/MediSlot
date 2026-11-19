@@ -26,11 +26,9 @@ MediSlot is a college project developed to make it easier for patients to find d
 **Frontend**
 
 - React.js
-- Vite
 - JavaScript
 - CSS
 - Axios
-- React Router DOM
 
 **Backend**
 
